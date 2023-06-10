@@ -9,9 +9,10 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  UncontrolledDropdown,
   Dropdown,
 } from "reactstrap";
+
+
 function App() {
   const [result, setResult] = useState<Reviews[]>([]);
 
@@ -31,6 +32,9 @@ function App() {
   let Total = 0;
   let length = result.length;
   result.forEach(({rating})=> Total += rating);
+
+  // chart
+  
   return (
     <>
       <NavbarComponent />
