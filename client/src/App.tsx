@@ -38,6 +38,10 @@ function App() {
     setfilteredReview([...result].sort((a, b) => a.rating - b.rating));
   };
 
+  const [filteredReviewHigh, setfilteredReviewHigh] = useState<Reviews[]>([]);
+  const numAscendingHigh = () => {
+    setfilteredReviewHigh([...result].sort((a, b) => b.rating - a.rating));
+  };
   // chart
 
   return (
@@ -58,12 +62,14 @@ function App() {
             <DropdownItem onClick={() => numAscending()}>
               Low to high
             </DropdownItem>
-            <DropdownItem onClick={function noRefCheck() {}}>
+            <DropdownItem onClick={() => numAscendingHigh()}>
               high to low
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
+      {filteredReviewHigh.length == 0 ? (
+      <div>
       {filteredReview.length == 0 ? (
         <div>
           {result.map((value) => {
@@ -88,6 +94,18 @@ function App() {
             );
           })}
         </div>
+      )}
+      </div> ):(<div>
+        {filteredReviewHigh.map((value) => {
+            return (
+              <Body
+                stars={value.rating}
+                comment={value.comment}
+                timestamp={value.Date.toString()}
+              />
+            );
+          })}
+      </div>
       )}
     </>
   );
