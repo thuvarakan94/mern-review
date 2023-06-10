@@ -12,7 +12,6 @@ import {
   Dropdown,
 } from "reactstrap";
 
-
 function App() {
   const [result, setResult] = useState<Reviews[]>([]);
 
@@ -31,10 +30,16 @@ function App() {
   // average rating
   let Total = 0;
   let length = result.length;
-  result.forEach(({rating})=> Total += rating);
+  result.forEach(({ rating }) => (Total += rating));
+
+  // sorting
+  const [filteredReview, setfilteredReview] = useState<Reviews[]>([]);
+  const numAscending = () => {
+    setfilteredReview([...result].sort((a, b) => a.rating - b.rating));
+  };
 
   // chart
-  
+
   return (
     <>
       <NavbarComponent />
@@ -48,9 +53,9 @@ function App() {
         }}
       >
         <Dropdown toggle={function noRefCheck() {}}>
-          <DropdownToggle caret>Average Rating {Total/length}</DropdownToggle>
+          <DropdownToggle caret>Average Rating {Total / length}</DropdownToggle>
           <DropdownMenu container="body">
-            <DropdownItem onClick={function noRefCheck() {}}>
+            <DropdownItem onClick={() => numAscending()}>
               Low to high
             </DropdownItem>
             <DropdownItem onClick={function noRefCheck() {}}>
@@ -59,15 +64,31 @@ function App() {
           </DropdownMenu>
         </Dropdown>
       </div>
-      {result.map((value) => {
-        return (
-          <Body
-            stars={value.rating}
-            comment={value.comment}
-            timestamp={value.Date.toString()}
-          />
-        );
-      })}
+      {filteredReview.length == 0 ? (
+        <div>
+          {result.map((value) => {
+            return (
+              <Body
+                stars={value.rating}
+                comment={value.comment}
+                timestamp={value.Date.toString()}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div>
+          {filteredReview.map((value) => {
+            return (
+              <Body
+                stars={value.rating}
+                comment={value.comment}
+                timestamp={value.Date.toString()}
+              />
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
