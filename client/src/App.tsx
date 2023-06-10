@@ -5,7 +5,6 @@ import Body from "./Reviews";
 import NavbarComponent from "./Navbar";
 import { Reviews } from "./types";
 import {
-  ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -36,11 +35,13 @@ function App() {
   const [filteredReview, setfilteredReview] = useState<Reviews[]>([]);
   const numAscending = () => {
     setfilteredReview([...result].sort((a, b) => a.rating - b.rating));
+    setfilteredReviewHigh([]);
   };
 
   const [filteredReviewHigh, setfilteredReviewHigh] = useState<Reviews[]>([]);
   const numAscendingHigh = () => {
     setfilteredReviewHigh([...result].sort((a, b) => b.rating - a.rating));
+    setfilteredReview([]);
   };
   // chart
 
@@ -68,9 +69,9 @@ function App() {
           </DropdownMenu>
         </Dropdown>
       </div>
-      {filteredReviewHigh.length == 0 ? (
+      {filteredReviewHigh.length === 0 ? (
       <div>
-      {filteredReview.length == 0 ? (
+      {filteredReview.length === 0 ? (
         <div>
           {result.map((value) => {
             return (
