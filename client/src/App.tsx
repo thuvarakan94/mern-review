@@ -11,17 +11,28 @@ import {
   Dropdown,
 } from "reactstrap";
 
+
 function App() {
   const [result, setResult] = useState<Reviews[]>([]);
 
   // filter components
 
   useEffect(() => {
+    let ratDate = [];
+    let rat = [];
+
     const fetchData = async () => {
       const { data } = await axios("http://127.0.0.1:3000/review");
 
       setResult(data.review);
       console.log(data.review);
+
+      for(const dataObj of data.review){
+        ratDate.push(parseInt(dataObj));
+        rat.push(parseInt(dataObj.employee_age ));
+
+    }
+
     };
     fetchData();
   }, []);
@@ -44,6 +55,14 @@ function App() {
     setfilteredReview([]);
   };
   // chart
+
+  const [chartRating, setchartRating] = useState(1);
+    const [chartDate, setChartDate] = useState();
+
+    result.map((value) => {
+      setchartRating(value.rating);
+      //  setChartDate(value.Date);
+    })
 
   return (
     <>
@@ -69,23 +88,38 @@ function App() {
           </DropdownMenu>
         </Dropdown>
       </div>
+  
       {filteredReviewHigh.length === 0 ? (
-      <div>
-      {filteredReview.length === 0 ? (
         <div>
-          {result.map((value) => {
-            return (
-              <Body
-                stars={value.rating}
-                comment={value.comment}
-                timestamp={value.Date.toString()}
-              />
-            );
-          })}
+          {filteredReview.length === 0 ? (
+            <div>
+              {result.map((value) => {
+                return (
+                  <Body
+                    stars={value.rating}
+                    comment={value.comment}
+                    timestamp={value.Date.toString()}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div>
+              {filteredReview.map((value) => {
+                return (
+                  <Body
+                    stars={value.rating}
+                    comment={value.comment}
+                    timestamp={value.Date.toString()}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       ) : (
         <div>
-          {filteredReview.map((value) => {
+          {filteredReviewHigh.map((value) => {
             return (
               <Body
                 stars={value.rating}
@@ -96,18 +130,8 @@ function App() {
           })}
         </div>
       )}
-      </div> ):(<div>
-        {filteredReviewHigh.map((value) => {
-            return (
-              <Body
-                stars={value.rating}
-                comment={value.comment}
-                timestamp={value.Date.toString()}
-              />
-            );
-          })}
-      </div>
-      )}
+
+
     </>
   );
 }
